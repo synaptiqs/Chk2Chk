@@ -133,7 +133,7 @@ export function Dashboard() {
               <ExpenseList
                 expenses={expenses.slice(0, 5)}
                 onDelete={deleteExpense}
-                showCategory={true}
+                showCategory={false}
               />
               {expenses.length > 5 && (
                 <p className="text-sm text-gray-500 text-center mt-2">
