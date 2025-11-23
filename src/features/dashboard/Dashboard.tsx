@@ -6,14 +6,14 @@ import { useDebt } from '../debt'
 import { formatCurrency } from '@/core/utils'
 import { Card } from '@/ui/components/cards/Card'
 import { IncomeForm, IncomeList } from '../income'
-import { ExpenseForm } from '../expenses'
+import { ExpenseForm, ExpenseList } from '../expenses'
 import { useState } from 'react'
 import { ExportPanel } from '../export'
 import { Link } from 'react-router-dom'
 
 export function Dashboard() {
   const { incomes, createIncome, deleteIncome, loading: incomeLoading } = useIncome()
-  const { expenses, createExpense, loading: expenseLoading } = useExpenses()
+  const { expenses, createExpense, deleteExpense, loading: expenseLoading } = useExpenses()
   const { envelopes, loading: envelopeLoading } = useEnvelopes()
   const { debts } = useDebt()
   const [showIncomeForm, setShowIncomeForm] = useState(false)
@@ -130,22 +130,15 @@ export function Dashboard() {
                   onCancel={() => setShowExpenseForm(false)}
                 />
               )}
-              {expenses.length === 0 ? (
-                <p className="text-sm text-gray-500 text-center py-4">No expenses yet</p>
-              ) : (
-                <div className="space-y-2">
-                  {expenses.slice(0, 5).map(expense => (
-                    <div key={expense.id} className="flex justify-between items-center p-2 bg-gray-50 rounded">
-                      <span className="text-sm">{new Date(expense.date).toLocaleDateString()}</span>
-                      <span className="font-semibold text-red-600">{formatCurrency(expense.amount)}</span>
-                    </div>
-                  ))}
-                  {expenses.length > 5 && (
-                    <p className="text-sm text-gray-500 text-center">
-                      Showing 5 of {expenses.length} entries
-                    </p>
-                  )}
-                </div>
+              <ExpenseList
+                expenses={expenses.slice(0, 5)}
+                onDelete={deleteExpense}
+                showCategory={true}
+              />
+              {expenses.length > 5 && (
+                <p className="text-sm text-gray-500 text-center mt-2">
+                  Showing 5 of {expenses.length} entries
+                </p>
               )}
             </div>
           </Card>

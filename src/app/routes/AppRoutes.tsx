@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import { Dashboard } from '../../features/dashboard/Dashboard'
 import { CategoriesPage } from '../../features/categories'
+import { ExpensesPage } from '../../features/expenses'
 import { Layout } from '../../ui/layout/Layout'
 
 export function AppRoutes() {
@@ -9,6 +10,7 @@ export function AppRoutes() {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/categories" element={<CategoriesPage />} />
+        <Route path="/expenses" element={<ExpensesPage />} />
         {/* Add more routes as features are built */}
       </Routes>
     </Layout>
