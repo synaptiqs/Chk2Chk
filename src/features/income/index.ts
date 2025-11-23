@@ -8,3 +8,4 @@ export * from './components/IncomeForm';
 export * from './components/IncomeList';
 export * from './hooks/useIncome';
 export * from './services/incomeService';
+export { IncomePage } from './pages/IncomePage';

@@ -5,7 +5,8 @@
 
 import { useState } from 'react';
 import { useIncome } from '../hooks/useIncome';
-import { IncomeForm, IncomeList } from '../components';
+import { IncomeForm } from '../components/IncomeForm';
+import { IncomeList } from '../components/IncomeList';
 import type { Income } from '../types';
 
 export function IncomePage() {
