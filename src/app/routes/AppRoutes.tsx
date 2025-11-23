@@ -6,6 +6,7 @@ import { IncomePage } from '../../features/income'
 import { BillsPage } from '../../features/bills/pages/BillsPage'
 import { DebtPage } from '../../features/debt/pages/DebtPage'
 import { BucketsPage } from '../../features/buckets'
+import { LedgerPage } from '../../features/ledger'
 import { SettingsPage } from '../../features/settings/pages/SettingsPage'
 import { Layout } from '../../ui/layout/Layout'
 
@@ -20,6 +21,7 @@ export function AppRoutes() {
         <Route path="/buckets" element={<BucketsPage />} />
         <Route path="/bills" element={<BillsPage />} />
         <Route path="/debt" element={<DebtPage />} />
+        <Route path="/ledger" element={<LedgerPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         {/* Add more routes as features are built */}
       </Routes>
