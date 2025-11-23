@@ -9,6 +9,7 @@ import { IncomeForm, IncomeList } from '../income'
 import { ExpenseForm } from '../expenses'
 import { useState } from 'react'
 import { ExportPanel } from '../export'
+import { Link } from 'react-router-dom'
 
 export function Dashboard() {
   const { incomes, createIncome, deleteIncome, loading: incomeLoading } = useIncome()
@@ -150,8 +151,26 @@ export function Dashboard() {
           </Card>
         </div>
 
-        {/* Export Section */}
+        {/* Quick Links */}
         <div className="mt-8">
+          <Card>
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Quick Actions</h3>
+                <p className="text-sm text-gray-600 mt-1">Manage your categories and settings</p>
+              </div>
+              <Link
+                to="/categories"
+                className="bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700"
+              >
+                Manage Categories
+              </Link>
+            </div>
+          </Card>
+        </div>
+
+        {/* Export Section */}
+        <div className="mt-6">
           <ExportPanel />
         </div>
       </div>
