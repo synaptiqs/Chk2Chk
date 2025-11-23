@@ -34,7 +34,7 @@ export interface Expense {
   updatedAt: string;
 }
 
-export interface Envelope {
+export interface Bucket {
   id: string;
   name: string;
   allocatedAmount: number;

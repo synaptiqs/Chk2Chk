@@ -3,7 +3,7 @@
  * Abstract interface for data storage - allows swapping implementations
  */
 
-import type { Income, Expense, Envelope, Bill, DebtAccount, RecurringTransaction, Category, UserSettings } from '@/core/types';
+import type { Income, Expense, Bucket, Bill, DebtAccount, RecurringTransaction, Category, UserSettings } from '@/core/types';
 
 /**
  * Complete user data package for migration
@@ -16,7 +16,7 @@ export interface CompleteUserData {
   };
   income: Income[];
   expenses: Expense[];
-  envelopes: Envelope[];
+  buckets: Bucket[];
   bills: Bill[];
   debts: DebtAccount[];
   recurringTransactions: RecurringTransaction[];
@@ -47,12 +47,12 @@ export interface IStorageRepository {
   updateExpense(id: string, data: Partial<Expense>): Promise<Expense>;
   deleteExpense(id: string): Promise<void>;
 
-  // Envelope operations
-  createEnvelope(data: Omit<Envelope, 'id' | 'createdAt' | 'updatedAt'>): Promise<Envelope>;
-  getAllEnvelopes(): Promise<Envelope[]>;
-  getEnvelopeById(id: string): Promise<Envelope | null>;
-  updateEnvelope(id: string, data: Partial<Envelope>): Promise<Envelope>;
-  deleteEnvelope(id: string): Promise<void>;
+  // Bucket operations
+  createBucket(data: Omit<Bucket, 'id' | 'createdAt' | 'updatedAt'>): Promise<Bucket>;
+  getAllBuckets(): Promise<Bucket[]>;
+  getBucketById(id: string): Promise<Bucket | null>;
+  updateBucket(id: string, data: Partial<Bucket>): Promise<Bucket>;
+  deleteBucket(id: string): Promise<void>;
 
   // Bill operations
   createBill(data: Omit<Bill, 'id' | 'createdAt' | 'updatedAt'>): Promise<Bill>;

@@ -4,7 +4,7 @@
  */
 
 import type { IStorageRepository, CompleteUserData } from '../repository';
-import type { Income, Expense, Envelope, Bill, DebtAccount, Category, UserSettings, RecurringTransaction } from '@/core/types';
+import type { Income, Expense, Bucket, Bill, DebtAccount, Category, UserSettings, RecurringTransaction } from '@/core/types';
 import { STORAGE_DB_NAME, STORAGE_DB_VERSION } from '@/core/constants';
 import { getCurrentTimestamp, generateId } from '@/core/utils';
 
@@ -15,7 +15,7 @@ const DB_VERSION = STORAGE_DB_VERSION;
 const STORES = {
   INCOME: 'income',
   EXPENSES: 'expenses',
-  ENVELOPES: 'envelopes',
+  BUCKETS: 'buckets',
   BILLS: 'bills',
   DEBTS: 'debts',
   CATEGORIES: 'categories',
@@ -51,8 +51,8 @@ export class IndexedDBRepository implements IStorageRepository {
         if (!db.objectStoreNames.contains(STORES.EXPENSES)) {
           db.createObjectStore(STORES.EXPENSES, { keyPath: 'id' });
         }
-        if (!db.objectStoreNames.contains(STORES.ENVELOPES)) {
-          db.createObjectStore(STORES.ENVELOPES, { keyPath: 'id' });
+        if (!db.objectStoreNames.contains(STORES.BUCKETS)) {
+          db.createObjectStore(STORES.BUCKETS, { keyPath: 'id' });
         }
         if (!db.objectStoreNames.contains(STORES.BILLS)) {
           db.createObjectStore(STORES.BILLS, { keyPath: 'id' });
@@ -222,25 +222,25 @@ export class IndexedDBRepository implements IStorageRepository {
     return this.delete(STORES.EXPENSES, id);
   }
 
-  // Envelope operations
-  async createEnvelope(data: Omit<Envelope, 'id' | 'createdAt' | 'updatedAt'>): Promise<Envelope> {
-    return this.create<Envelope>(STORES.ENVELOPES, data);
+  // Bucket operations
+  async createBucket(data: Omit<Bucket, 'id' | 'createdAt' | 'updatedAt'>): Promise<Bucket> {
+    return this.create<Bucket>(STORES.BUCKETS, data);
   }
 
-  async getAllEnvelopes(): Promise<Envelope[]> {
-    return this.getAll<Envelope>(STORES.ENVELOPES);
+  async getAllBuckets(): Promise<Bucket[]> {
+    return this.getAll<Bucket>(STORES.BUCKETS);
   }
 
-  async getEnvelopeById(id: string): Promise<Envelope | null> {
-    return this.getById<Envelope>(STORES.ENVELOPES, id);
+  async getBucketById(id: string): Promise<Bucket | null> {
+    return this.getById<Bucket>(STORES.BUCKETS, id);
   }
 
-  async updateEnvelope(id: string, data: Partial<Envelope>): Promise<Envelope> {
-    return this.update<Envelope>(STORES.ENVELOPES, id, data);
+  async updateBucket(id: string, data: Partial<Bucket>): Promise<Bucket> {
+    return this.update<Bucket>(STORES.BUCKETS, id, data);
   }
 
-  async deleteEnvelope(id: string): Promise<void> {
-    return this.delete(STORES.ENVELOPES, id);
+  async deleteBucket(id: string): Promise<void> {
+    return this.delete(STORES.BUCKETS, id);
   }
 
   // Bill operations
@@ -333,10 +333,10 @@ export class IndexedDBRepository implements IStorageRepository {
 
   // Migration support
   async exportAllData(): Promise<CompleteUserData> {
-    const [income, expenses, envelopes, bills, debts, categories, recurring, settings] = await Promise.all([
+    const [income, expenses, buckets, bills, debts, categories, recurring, settings] = await Promise.all([
       this.getAllIncomes(),
       this.getAllExpenses(),
-      this.getAllEnvelopes(),
+      this.getAllBuckets(),
       this.getAllBills(),
       this.getAllDebts(),
       this.getAllCategories(),
@@ -349,7 +349,7 @@ export class IndexedDBRepository implements IStorageRepository {
       ...expenses.map(e => e.date),
     ].filter(Boolean).sort();
 
-    const totalRecords = income.length + expenses.length + envelopes.length + bills.length + debts.length + categories.length + recurring.length;
+    const totalRecords = income.length + expenses.length + buckets.length + bills.length + debts.length + categories.length + recurring.length;
 
     return {
       version: '1.0.0',
@@ -368,7 +368,7 @@ export class IndexedDBRepository implements IStorageRepository {
       },
       income,
       expenses,
-      envelopes,
+      buckets,
       bills,
       debts,
       recurringTransactions: recurring,
@@ -404,7 +404,7 @@ export class IndexedDBRepository implements IStorageRepository {
     const transactions: Promise<any>[] = [
       ...data.income.map(item => this.insertWithOriginalData<Income>(STORES.INCOME, item)),
       ...data.expenses.map(item => this.insertWithOriginalData<Expense>(STORES.EXPENSES, item)),
-      ...data.envelopes.map(item => this.insertWithOriginalData<Envelope>(STORES.ENVELOPES, item)),
+      ...data.buckets.map(item => this.insertWithOriginalData<Bucket>(STORES.BUCKETS, item)),
       ...data.bills.map(item => this.insertWithOriginalData<Bill>(STORES.BILLS, item)),
       ...data.debts.map(item => this.insertWithOriginalData<DebtAccount>(STORES.DEBTS, item)),
       ...data.categories.map(item => this.insertWithOriginalData<Category>(STORES.CATEGORIES, item)),
@@ -429,16 +429,16 @@ export class IndexedDBRepository implements IStorageRepository {
     const errors: string[] = [];
 
     try {
-      const [expenses, envelopes] = await Promise.all([
+      const [expenses, buckets] = await Promise.all([
         this.getAllExpenses(),
-        this.getAllEnvelopes(),
+        this.getAllBuckets(),
       ]);
 
-      // Validate envelope balances
-      for (const envelope of envelopes) {
-        const calculatedBalance = envelope.allocatedAmount - envelope.spentAmount;
-        if (Math.abs(envelope.balance - calculatedBalance) > 0.01) {
-          errors.push(`Envelope ${envelope.id} has incorrect balance calculation`);
+      // Validate bucket balances
+      for (const bucket of buckets) {
+        const calculatedBalance = bucket.allocatedAmount - bucket.spentAmount;
+        if (Math.abs(bucket.balance - calculatedBalance) > 0.01) {
+          errors.push(`Bucket ${bucket.id} has incorrect balance calculation`);
         }
       }
 

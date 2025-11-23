@@ -1,7 +1,7 @@
 import { FeatureErrorBoundary } from '../../app/error-boundaries'
 import { useIncome } from '../income'
 import { useExpenses } from '../expenses'
-import { useEnvelopes } from '../envelopes'
+import { useBuckets } from '../buckets'
 import { useDebt } from '../debt'
 import { formatCurrency } from '@/core/utils'
 import { Card } from '@/ui/components/cards/Card'
@@ -10,12 +10,12 @@ import { Link } from 'react-router-dom'
 export function Dashboard() {
   const { incomes, loading: incomeLoading } = useIncome()
   const { expenses, loading: expenseLoading } = useExpenses()
-  const { envelopes, loading: envelopeLoading } = useEnvelopes()
+  const { buckets, loading: bucketLoading } = useBuckets()
   const { debts } = useDebt()
 
   const totalIncome = incomes.reduce((sum, income) => sum + income.amount, 0)
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0)
-  const totalEnvelopes = envelopes.reduce((sum, env) => sum + env.allocatedAmount, 0)
+  const totalBuckets = buckets.reduce((sum, bucket) => sum + bucket.allocatedAmount, 0)
   const totalDebt = debts.reduce((sum, debt) => sum + debt.balance, 0)
   const balance = totalIncome - totalExpenses
 
@@ -62,12 +62,12 @@ export function Dashboard() {
             </Card>
           </Link>
 
-          <Link to="/envelopes" className="block no-underline">
+          <Link to="/buckets" className="block no-underline">
             <Card>
               <div className="w-full text-left hover:opacity-80 active:opacity-70 transition-opacity touch-manipulation cursor-pointer">
-                <h3 className="text-sm font-medium text-gray-500">Envelopes</h3>
+                <h3 className="text-sm font-medium text-gray-500">Buckets</h3>
                 <p className="text-2xl font-bold text-gray-900 mt-2">
-                  {envelopeLoading ? '...' : formatCurrency(totalEnvelopes)}
+                  {bucketLoading ? '...' : formatCurrency(totalBuckets)}
                 </p>
               </div>
             </Card>

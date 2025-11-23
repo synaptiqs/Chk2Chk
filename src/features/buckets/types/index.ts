@@ -1,14 +1,13 @@
 /**
- * Envelope-specific types
+ * Bucket-specific types
  */
 
 import type { BaseEntity } from '@/core/types';
 
-export interface Envelope extends BaseEntity {
+export interface Bucket extends BaseEntity {
   name: string;
   allocatedAmount: number;
   spentAmount: number;
   balance: number; // Calculated: allocatedAmount - spentAmount
   categoryId?: string;
 }
-

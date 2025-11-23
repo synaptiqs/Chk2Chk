@@ -1,63 +1,63 @@
 /**
- * Envelopes Page
- * Full page for managing envelopes
+ * Buckets Page
+ * Full page for managing buckets
  */
 
 import { useState } from 'react';
-import { useEnvelopes } from '../hooks/useEnvelopes';
-import { EnvelopeForm, EnvelopeList } from '../components';
-import type { Envelope } from '../types';
+import { useBuckets } from '../hooks/useBuckets';
+import { BucketForm, BucketList } from '../components';
+import type { Bucket } from '../types';
 
-export function EnvelopesPage() {
-  const { envelopes, createEnvelope, updateEnvelope, deleteEnvelope, loading } = useEnvelopes();
-  const [editingEnvelope, setEditingEnvelope] = useState<Envelope | null>(null);
+export function BucketsPage() {
+  const { buckets, createBucket, updateBucket, deleteBucket, loading } = useBuckets();
+  const [editingBucket, setEditingBucket] = useState<Bucket | null>(null);
   const [showForm, setShowForm] = useState(false);
 
-  const handleSubmit = async (data: Omit<Envelope, 'id' | 'createdAt' | 'updatedAt' | 'balance'>) => {
-    if (editingEnvelope) {
-      await updateEnvelope(editingEnvelope.id, data);
-      setEditingEnvelope(null);
+  const handleSubmit = async (data: Omit<Bucket, 'id' | 'createdAt' | 'updatedAt' | 'balance'>) => {
+    if (editingBucket) {
+      await updateBucket(editingBucket.id, data);
+      setEditingBucket(null);
     } else {
-      await createEnvelope(data);
+      await createBucket(data);
     }
     setShowForm(false);
   };
 
-  const handleEdit = (envelope: Envelope) => {
-    setEditingEnvelope(envelope);
+  const handleEdit = (bucket: Bucket) => {
+    setEditingBucket(bucket);
     setShowForm(true);
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm('Are you sure you want to delete this envelope? This will not affect your expenses.')) {
-      await deleteEnvelope(id);
+    if (window.confirm('Are you sure you want to delete this bucket? This will not affect your expenses.')) {
+      await deleteBucket(id);
     }
   };
 
   const handleCancel = () => {
-    setEditingEnvelope(null);
+    setEditingBucket(null);
     setShowForm(false);
   };
 
-  const totalAllocated = envelopes.reduce((sum, env) => sum + env.allocatedAmount, 0);
-  const totalSpent = envelopes.reduce((sum, env) => sum + env.spentAmount, 0);
-  const totalBalance = envelopes.reduce((sum, env) => sum + env.balance, 0);
+  const totalAllocated = buckets.reduce((sum, bucket) => sum + bucket.allocatedAmount, 0);
+  const totalSpent = buckets.reduce((sum, bucket) => sum + bucket.spentAmount, 0);
+  const totalBalance = buckets.reduce((sum, bucket) => sum + bucket.balance, 0);
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Envelopes</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Buckets</h1>
           <p className="text-gray-600 mt-1">Allocate your income to different spending categories</p>
         </div>
         <button
           onClick={() => {
-            setEditingEnvelope(null);
+            setEditingBucket(null);
             setShowForm(true);
           }}
           className="bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700"
         >
-          {showForm ? 'Cancel' : 'Create Envelope'}
+          {showForm ? 'Cancel' : 'Create Bucket'}
         </button>
       </div>
 
@@ -86,24 +86,24 @@ export function EnvelopesPage() {
       {showForm && (
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
           <h2 className="text-xl font-semibold mb-4">
-            {editingEnvelope ? 'Edit Envelope' : 'Create New Envelope'}
+            {editingBucket ? 'Edit Bucket' : 'Create New Bucket'}
           </h2>
-          <EnvelopeForm
+          <BucketForm
             onSubmit={handleSubmit}
             onCancel={handleCancel}
-            initialData={editingEnvelope || undefined}
-            submitLabel={editingEnvelope ? 'Update Envelope' : 'Create Envelope'}
+            initialData={editingBucket || undefined}
+            submitLabel={editingBucket ? 'Update Bucket' : 'Create Bucket'}
           />
         </div>
       )}
 
       <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-        <h2 className="text-xl font-semibold mb-4">Your Envelopes</h2>
+        <h2 className="text-xl font-semibold mb-4">Your Buckets</h2>
         {loading ? (
-          <div className="text-center py-8 text-gray-500">Loading envelopes...</div>
+          <div className="text-center py-8 text-gray-500">Loading buckets...</div>
         ) : (
-          <EnvelopeList
-            envelopes={envelopes}
+          <BucketList
+            buckets={buckets}
             onEdit={handleEdit}
             onDelete={handleDelete}
           />
@@ -112,4 +112,3 @@ export function EnvelopesPage() {
     </div>
   );
 }
-

@@ -28,8 +28,8 @@ export function Layout({ children }: LayoutProps) {
               <Link to="/expenses" className="text-gray-700 hover:text-primary-600 font-medium">
                 Expenses
               </Link>
-              <Link to="/envelopes" className="text-gray-700 hover:text-primary-600 font-medium">
-                Envelopes
+              <Link to="/buckets" className="text-gray-700 hover:text-primary-600 font-medium">
+                Buckets
               </Link>
               <Link to="/bills" className="text-gray-700 hover:text-primary-600 font-medium">
                 Bills
@@ -83,11 +83,11 @@ export function Layout({ children }: LayoutProps) {
                   Expenses
                 </Link>
                 <Link
-                  to="/envelopes"
+                  to="/buckets"
                   onClick={() => setMobileMenuOpen(false)}
                   className="text-gray-700 hover:text-primary-600 font-medium px-2 py-2 rounded-md hover:bg-gray-50"
                 >
-                  Envelopes
+                  Buckets
                 </Link>
                 <Link
                   to="/bills"

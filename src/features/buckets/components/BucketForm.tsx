@@ -1,20 +1,20 @@
 /**
- * Envelope Form Component
+ * Bucket Form Component
  */
 
 import { useState, useEffect } from 'react';
 import { dataRepository } from '@/data/services';
-import type { Envelope } from '../types';
+import type { Bucket } from '../types';
 import type { Category } from '@/core/types';
 
-interface EnvelopeFormProps {
-  onSubmit: (data: Omit<Envelope, 'id' | 'createdAt' | 'updatedAt' | 'balance'>) => Promise<void>;
+interface BucketFormProps {
+  onSubmit: (data: Omit<Bucket, 'id' | 'createdAt' | 'updatedAt' | 'balance'>) => Promise<void>;
   onCancel?: () => void;
-  initialData?: Partial<Envelope>;
+  initialData?: Partial<Bucket>;
   submitLabel?: string;
 }
 
-export function EnvelopeForm({ onSubmit, onCancel, initialData, submitLabel = 'Create Envelope' }: EnvelopeFormProps) {
+export function BucketForm({ onSubmit, onCancel, initialData, submitLabel = 'Create Bucket' }: BucketFormProps) {
   const [formData, setFormData] = useState<{
     name: string;
     allocatedAmount: number;
@@ -53,7 +53,7 @@ export function EnvelopeForm({ onSubmit, onCancel, initialData, submitLabel = 'C
         categoryId: '',
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save envelope');
+      setError(err instanceof Error ? err.message : 'Failed to save bucket');
     } finally {
       setLoading(false);
     }
@@ -69,7 +69,7 @@ export function EnvelopeForm({ onSubmit, onCancel, initialData, submitLabel = 'C
 
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-          Envelope Name *
+          Bucket Name *
         </label>
         <input
           type="text"
@@ -113,7 +113,7 @@ export function EnvelopeForm({ onSubmit, onCancel, initialData, submitLabel = 'C
           required
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
         />
-        <p className="text-xs text-gray-500 mt-1">Amount to initially allocate to this envelope</p>
+        <p className="text-xs text-gray-500 mt-1">Amount to initially allocate to this bucket</p>
       </div>
 
       <div className="flex gap-3">
@@ -137,4 +137,3 @@ export function EnvelopeForm({ onSubmit, onCancel, initialData, submitLabel = 'C
     </form>
   );
 }
-
