@@ -1,0 +1,29 @@
+# Railway configuration file
+# This file configures Railway deployment settings for Chk2Chk
+
+[build]
+# Build command for the project
+builder = "nixpacks"
+# Nixpacks will auto-detect React/TypeScript and use appropriate build settings
+
+[deploy]
+# Start command for production
+# For React apps built with Vite/CRA, this serves the static build
+# Railway will auto-detect if package.json has a "start" script
+# If not, it will serve the build directory
+
+# Health check configuration
+[healthcheck]
+# Railway will automatically check if the service is responding
+# on the assigned port (default: PORT environment variable)
+path = "/"
+timeout = 100
+
+# Environment variables
+# Set these in Railway dashboard or via CLI:
+# railway variables set NODE_ENV=production
+# railway variables set DATABASE_URL=postgresql://... (when adding database)
+
+# For MVP (local storage): No database needed
+# For future (membership model): Add DATABASE_URL, JWT_SECRET, etc.
+

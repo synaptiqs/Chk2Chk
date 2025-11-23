@@ -1,0 +1,160 @@
+import { FeatureErrorBoundary } from '../../app/error-boundaries'
+import { useIncome } from '../income'
+import { useExpenses } from '../expenses'
+import { useEnvelopes } from '../envelopes'
+import { useDebt } from '../debt'
+import { formatCurrency } from '@/core/utils'
+import { Card } from '@/ui/components/cards/Card'
+import { IncomeForm, IncomeList } from '../income'
+import { ExpenseForm } from '../expenses'
+import { useState } from 'react'
+import { ExportPanel } from '../export'
+
+export function Dashboard() {
+  const { incomes, createIncome, deleteIncome, loading: incomeLoading } = useIncome()
+  const { expenses, createExpense, loading: expenseLoading } = useExpenses()
+  const { envelopes, loading: envelopeLoading } = useEnvelopes()
+  const { debts } = useDebt()
+  const [showIncomeForm, setShowIncomeForm] = useState(false)
+  const [showExpenseForm, setShowExpenseForm] = useState(false)
+
+  const totalIncome = incomes.reduce((sum, income) => sum + income.amount, 0)
+  const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0)
+  const totalEnvelopes = envelopes.reduce((sum, env) => sum + env.allocatedAmount, 0)
+  const balance = totalIncome - totalExpenses
+
+  return (
+    <FeatureErrorBoundary moduleName="Dashboard">
+      <div className="space-y-6">
+        <div>
+          <h2 className="text-3xl font-bold text-gray-900">Dashboard</h2>
+          <p className="text-gray-600 mt-2">Welcome to Chk2Chk - Your Budgeting Companion</p>
+        </div>
+
+        {/* Summary Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Card>
+            <h3 className="text-sm font-medium text-gray-500">Total Income</h3>
+            <p className="text-2xl font-bold text-primary-600 mt-2">
+              {incomeLoading ? '...' : formatCurrency(totalIncome)}
+            </p>
+          </Card>
+
+          <Card>
+            <h3 className="text-sm font-medium text-gray-500">Total Expenses</h3>
+            <p className="text-2xl font-bold text-red-600 mt-2">
+              {expenseLoading ? '...' : formatCurrency(totalExpenses)}
+            </p>
+          </Card>
+
+          <Card>
+            <h3 className="text-sm font-medium text-gray-500">Balance</h3>
+            <p className={`text-2xl font-bold mt-2 ${balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+              {formatCurrency(balance)}
+            </p>
+          </Card>
+
+          <Card>
+            <h3 className="text-sm font-medium text-gray-500">Envelopes</h3>
+            <p className="text-2xl font-bold text-gray-900 mt-2">
+              {envelopeLoading ? '...' : formatCurrency(totalEnvelopes)}
+            </p>
+          </Card>
+        </div>
+
+        {/* Debt Warning */}
+        {debts.length > 0 && (
+          <Card className="bg-yellow-50 border-yellow-200">
+            <div className="flex items-center gap-2">
+              <span className="text-yellow-600 text-xl">⚠️</span>
+              <div>
+                <h3 className="font-semibold text-yellow-900">Debt Detected</h3>
+                <p className="text-sm text-yellow-700 mt-1">
+                  You have {debts.length} debt account(s). Remember to prioritize debt payments and keep savings under $1,000.
+                </p>
+              </div>
+            </div>
+          </Card>
+        )}
+
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Income Section */}
+          <Card title="Income">
+            <div className="space-y-4">
+              {!showIncomeForm ? (
+                <button
+                  onClick={() => setShowIncomeForm(true)}
+                  className="w-full bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700"
+                >
+                  Add Income
+                </button>
+              ) : (
+                <IncomeForm
+                  onSubmit={async (data) => {
+                    await createIncome(data)
+                    setShowIncomeForm(false)
+                  }}
+                  onCancel={() => setShowIncomeForm(false)}
+                />
+              )}
+              <IncomeList
+                incomes={incomes.slice(0, 5)}
+                onDelete={deleteIncome}
+              />
+              {incomes.length > 5 && (
+                <p className="text-sm text-gray-500 text-center">
+                  Showing 5 of {incomes.length} entries
+                </p>
+              )}
+            </div>
+          </Card>
+
+          {/* Expenses Section */}
+          <Card title="Expenses">
+            <div className="space-y-4">
+              {!showExpenseForm ? (
+                <button
+                  onClick={() => setShowExpenseForm(true)}
+                  className="w-full bg-primary-600 text-white px-4 py-2 rounded-md hover:bg-primary-700"
+                >
+                  Add Expense
+                </button>
+              ) : (
+                <ExpenseForm
+                  onSubmit={async (data) => {
+                    await createExpense(data)
+                    setShowExpenseForm(false)
+                  }}
+                  onCancel={() => setShowExpenseForm(false)}
+                />
+              )}
+              {expenses.length === 0 ? (
+                <p className="text-sm text-gray-500 text-center py-4">No expenses yet</p>
+              ) : (
+                <div className="space-y-2">
+                  {expenses.slice(0, 5).map(expense => (
+                    <div key={expense.id} className="flex justify-between items-center p-2 bg-gray-50 rounded">
+                      <span className="text-sm">{new Date(expense.date).toLocaleDateString()}</span>
+                      <span className="font-semibold text-red-600">{formatCurrency(expense.amount)}</span>
+                    </div>
+                  ))}
+                  {expenses.length > 5 && (
+                    <p className="text-sm text-gray-500 text-center">
+                      Showing 5 of {expenses.length} entries
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          </Card>
+        </div>
+
+        {/* Export Section */}
+        <div className="mt-8">
+          <ExportPanel />
+        </div>
+      </div>
+    </FeatureErrorBoundary>
+  )
+}

@@ -49,7 +49,11 @@ Chk2Chk is a budgeting application designed specifically for people who get paid
 - **Authentication:** To be implemented when transitioning to membership model
 
 #### Deployment
-- **Platform:** Vercel, Netlify, or similar (static hosting for MVP, can add serverless functions later)
+- **Platform:** Railway (full-stack hosting platform)
+  - Frontend: React app deployment
+  - Database: PostgreSQL (when transitioning to membership model)
+  - Backend: API services (future membership features)
+  - Benefits: Unified platform, easy database integration, seamless migration path
 - **Type:** Responsive Web Application (works on all devices)
 
 ### Core Features
@@ -255,14 +259,21 @@ Chk2Chk is a budgeting application designed specifically for people who get paid
 - **Fallback Plans:** Design for library failures (show alternatives)
 
 ### Hosting & Deployment
-- Static hosting platform (Vercel, Netlify, or GitHub Pages)
-- Domain name (optional for MVP)
-- SSL certificate (included with hosting platforms)
+- **Platform:** Railway
+  - Frontend hosting (React app)
+  - PostgreSQL database (integrated, when needed)
+  - Backend API hosting (future membership features)
+  - Automatic SSL certificates
+  - Git-based deployments
+  - Environment variable management
+  - Usage-based pricing
+- **Domain name:** Optional for MVP (Railway provides default domain)
+- **SSL certificate:** Automatically included with Railway
 
 ### Future Dependencies (Membership Model)
-- PostgreSQL database (Supabase, Railway, or similar)
-- Authentication service (Auth0, Clerk, or custom)
-- Payment processing (Stripe, PayPal, etc.)
+- **Database:** PostgreSQL on Railway (same platform as frontend)
+- **Authentication service:** Auth0, Clerk, or custom implementation
+- **Payment processing:** Stripe, PayPal, etc.
 
 ## Risk Assessment
 
