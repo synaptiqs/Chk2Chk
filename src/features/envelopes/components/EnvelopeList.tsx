@@ -7,11 +7,12 @@ import type { Envelope } from '../types';
 
 interface EnvelopeListProps {
   envelopes: Envelope[];
+  onEdit?: (envelope: Envelope) => void;
   onAllocate?: (envelopeId: string) => void;
   onDelete?: (id: string) => void;
 }
 
-export function EnvelopeList({ envelopes, onAllocate, onDelete }: EnvelopeListProps) {
+export function EnvelopeList({ envelopes, onEdit, onAllocate, onDelete }: EnvelopeListProps) {
   if (envelopes.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
@@ -48,8 +49,16 @@ export function EnvelopeList({ envelopes, onAllocate, onDelete }: EnvelopeListPr
                 </div>
               </div>
             </div>
-            {(onAllocate || onDelete) && (
+            {(onEdit || onAllocate || onDelete) && (
               <div className="flex gap-2 ml-4">
+                {onEdit && (
+                  <button
+                    onClick={() => onEdit(envelope)}
+                    className="text-primary-600 hover:text-primary-700 text-sm font-medium"
+                  >
+                    Edit
+                  </button>
+                )}
                 {onAllocate && (
                   <button
                     onClick={() => onAllocate(envelope.id)}

@@ -57,6 +57,9 @@ export function ExpenseList({ expenses, onEdit, onDelete, showCategory = true }:
                     {formatCurrency(expense.amount)}
                   </span>
                 </div>
+                {expense.description && (
+                  <p className="text-sm text-gray-700 mt-1 font-medium">{expense.description}</p>
+                )}
                 <p className="text-sm text-gray-600 mt-1">
                   {format(new Date(expense.date), 'MMM dd, yyyy')}
                 </p>

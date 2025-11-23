@@ -26,6 +26,7 @@ export interface Expense {
   date: string;
   amount: number;
   categoryId: string;
+  description: string;
   tags: string[];
   notes?: string;
   recurringTransactionId?: string;

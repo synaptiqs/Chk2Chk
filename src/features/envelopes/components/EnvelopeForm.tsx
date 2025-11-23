@@ -2,8 +2,10 @@
  * Envelope Form Component
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { dataRepository } from '@/data/services';
 import type { Envelope } from '../types';
+import type { Category } from '@/core/types';
 
 interface EnvelopeFormProps {
   onSubmit: (data: Omit<Envelope, 'id' | 'createdAt' | 'updatedAt' | 'balance'>) => Promise<void>;
@@ -13,14 +15,24 @@ interface EnvelopeFormProps {
 }
 
 export function EnvelopeForm({ onSubmit, onCancel, initialData, submitLabel = 'Create Envelope' }: EnvelopeFormProps) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    allocatedAmount: number;
+    spentAmount: number;
+    categoryId: string;
+  }>({
     name: initialData?.name || '',
     allocatedAmount: initialData?.allocatedAmount || 0,
     spentAmount: initialData?.spentAmount || 0,
     categoryId: initialData?.categoryId || '',
   });
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    dataRepository.getAllCategories().then(setCategories);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +40,12 @@ export function EnvelopeForm({ onSubmit, onCancel, initialData, submitLabel = 'C
     setError(null);
 
     try {
-      await onSubmit(formData);
+      await onSubmit({
+        name: formData.name,
+        allocatedAmount: formData.allocatedAmount,
+        spentAmount: formData.spentAmount,
+        categoryId: formData.categoryId || undefined,
+      });
       setFormData({
         name: '',
         allocatedAmount: 0,
@@ -66,8 +83,40 @@ export function EnvelopeForm({ onSubmit, onCancel, initialData, submitLabel = 'C
       </div>
 
       <div>
+        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+          Envelope Name *
+        </label>
+        <input
+          type="text"
+          id="name"
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          required
+          placeholder="e.g., Groceries, Rent, Savings"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+        />
+      </div>
+
+      <div>
+        <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 mb-1">
+          Category (Optional)
+        </label>
+        <select
+          id="categoryId"
+          value={formData.categoryId}
+          onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+        >
+          <option value="">No category</option>
+          {categories.map(cat => (
+            <option key={cat.id} value={cat.id}>{cat.name}</option>
+          ))}
+        </select>
+      </div>
+
+      <div>
         <label htmlFor="allocatedAmount" className="block text-sm font-medium text-gray-700 mb-1">
-          Initial Allocation
+          Initial Allocation *
         </label>
         <input
           type="number"
@@ -76,8 +125,10 @@ export function EnvelopeForm({ onSubmit, onCancel, initialData, submitLabel = 'C
           min="0"
           value={formData.allocatedAmount}
           onChange={(e) => setFormData({ ...formData, allocatedAmount: parseFloat(e.target.value) || 0 })}
+          required
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
         />
+        <p className="text-xs text-gray-500 mt-1">Amount to initially allocate to this envelope</p>
       </div>
 
       <div className="flex gap-3">

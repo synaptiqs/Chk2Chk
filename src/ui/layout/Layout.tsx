@@ -24,6 +24,15 @@ export function Layout({ children }: LayoutProps) {
               <Link to="/expenses" className="text-gray-700 hover:text-primary-600 font-medium">
                 Expenses
               </Link>
+              <Link to="/envelopes" className="text-gray-700 hover:text-primary-600 font-medium">
+                Envelopes
+              </Link>
+              <Link to="/bills" className="text-gray-700 hover:text-primary-600 font-medium">
+                Bills
+              </Link>
+              <Link to="/debt" className="text-gray-700 hover:text-primary-600 font-medium">
+                Debt
+              </Link>
               <Link to="/categories" className="text-gray-700 hover:text-primary-600 font-medium">
                 Categories
               </Link>

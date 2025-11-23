@@ -19,6 +19,7 @@ export function ExpenseForm({ onSubmit, onCancel, initialData, submitLabel = 'Ad
     date: initialData?.date || new Date().toISOString().split('T')[0],
     amount: initialData?.amount || 0,
     categoryId: initialData?.categoryId || '',
+    description: initialData?.description || '',
     tags: initialData?.tags || [],
     notes: initialData?.notes || '',
   });
@@ -42,6 +43,7 @@ export function ExpenseForm({ onSubmit, onCancel, initialData, submitLabel = 'Ad
         date: new Date().toISOString().split('T')[0],
         amount: 0,
         categoryId: '',
+        description: '',
         tags: [],
         notes: '',
       });
@@ -87,7 +89,7 @@ export function ExpenseForm({ onSubmit, onCancel, initialData, submitLabel = 'Ad
 
       <div>
         <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-1">
-          Amount
+          Amount *
         </label>
         <input
           type="number"
@@ -103,7 +105,7 @@ export function ExpenseForm({ onSubmit, onCancel, initialData, submitLabel = 'Ad
 
       <div>
         <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 mb-1">
-          Category
+          Category *
         </label>
         <select
           id="categoryId"
@@ -117,6 +119,22 @@ export function ExpenseForm({ onSubmit, onCancel, initialData, submitLabel = 'Ad
             <option key={cat.id} value={cat.id}>{cat.name}</option>
           ))}
         </select>
+      </div>
+
+      <div>
+        <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+          Description *
+        </label>
+        <input
+          type="text"
+          id="description"
+          value={formData.description}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          required
+          placeholder="e.g., Grocery shopping at Walmart, Gas station fill-up"
+          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+        />
+        <p className="text-xs text-gray-500 mt-1">Add details for better tracking and analysis</p>
       </div>
 
       <div>
