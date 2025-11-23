@@ -29,9 +29,9 @@ export function Dashboard() {
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Link to="/income" className="block">
+          <Link to="/income" className="block no-underline">
             <Card>
-              <div className="w-full text-left hover:opacity-80 active:opacity-70 transition-opacity touch-manipulation">
+              <div className="w-full text-left hover:opacity-80 active:opacity-70 transition-opacity touch-manipulation cursor-pointer">
                 <h3 className="text-sm font-medium text-gray-500">Total Income</h3>
                 <p className="text-2xl font-bold text-primary-600 mt-2">
                   {incomeLoading ? '...' : formatCurrency(totalIncome)}
@@ -40,9 +40,9 @@ export function Dashboard() {
             </Card>
           </Link>
 
-          <Link to="/expenses" className="block">
+          <Link to="/expenses" className="block no-underline">
             <Card>
-              <div className="w-full text-left hover:opacity-80 active:opacity-70 transition-opacity touch-manipulation">
+              <div className="w-full text-left hover:opacity-80 active:opacity-70 transition-opacity touch-manipulation cursor-pointer">
                 <h3 className="text-sm font-medium text-gray-500">Total Expenses</h3>
                 <p className="text-2xl font-bold text-red-600 mt-2">
                   {expenseLoading ? '...' : formatCurrency(totalExpenses)}
@@ -51,9 +51,9 @@ export function Dashboard() {
             </Card>
           </Link>
 
-          <Link to="/expenses" className="block">
+          <Link to="/expenses" className="block no-underline">
             <Card>
-              <div className="w-full text-left hover:opacity-80 active:opacity-70 transition-opacity touch-manipulation">
+              <div className="w-full text-left hover:opacity-80 active:opacity-70 transition-opacity touch-manipulation cursor-pointer">
                 <h3 className="text-sm font-medium text-gray-500">Balance</h3>
                 <p className={`text-2xl font-bold mt-2 ${balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {formatCurrency(balance)}
@@ -62,9 +62,9 @@ export function Dashboard() {
             </Card>
           </Link>
 
-          <Link to="/envelopes" className="block">
+          <Link to="/envelopes" className="block no-underline">
             <Card>
-              <div className="w-full text-left hover:opacity-80 active:opacity-70 transition-opacity touch-manipulation">
+              <div className="w-full text-left hover:opacity-80 active:opacity-70 transition-opacity touch-manipulation cursor-pointer">
                 <h3 className="text-sm font-medium text-gray-500">Envelopes</h3>
                 <p className="text-2xl font-bold text-gray-900 mt-2">
                   {envelopeLoading ? '...' : formatCurrency(totalEnvelopes)}
@@ -76,9 +76,9 @@ export function Dashboard() {
 
         {/* Debt Warning */}
         {debts.length > 0 && (
-          <Link to="/debt" className="block">
+          <Link to="/debt" className="block no-underline">
             <Card className="bg-yellow-50 border-yellow-200">
-              <div className="w-full text-left hover:opacity-80 active:opacity-70 transition-opacity touch-manipulation">
+              <div className="w-full text-left hover:opacity-80 active:opacity-70 transition-opacity touch-manipulation cursor-pointer">
                 <div className="flex items-center gap-2">
                   <span className="text-yellow-600 text-xl">⚠️</span>
                   <div>
@@ -94,9 +94,9 @@ export function Dashboard() {
         )}
 
         {/* Bills Card */}
-        <Link to="/bills" className="block">
+        <Link to="/bills" className="block no-underline">
           <Card>
-            <div className="w-full text-left hover:opacity-80 active:opacity-70 transition-opacity touch-manipulation">
+            <div className="w-full text-left hover:opacity-80 active:opacity-70 transition-opacity touch-manipulation cursor-pointer">
               <h3 className="text-sm font-medium text-gray-500">Bills</h3>
               <p className="text-lg text-gray-600 mt-2">Manage your recurring bills and payments</p>
             </div>
@@ -104,9 +104,9 @@ export function Dashboard() {
         </Link>
 
         {/* Categories Card */}
-        <Link to="/categories" className="block">
+        <Link to="/categories" className="block no-underline">
           <Card>
-            <div className="w-full text-left hover:opacity-80 active:opacity-70 transition-opacity touch-manipulation">
+            <div className="w-full text-left hover:opacity-80 active:opacity-70 transition-opacity touch-manipulation cursor-pointer">
               <h3 className="text-sm font-medium text-gray-500">Categories</h3>
               <p className="text-lg text-gray-600 mt-2">Manage your expense categories</p>
             </div>
