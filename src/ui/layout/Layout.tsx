@@ -36,6 +36,9 @@ export function Layout({ children }: LayoutProps) {
               <Link to="/categories" className="text-gray-700 hover:text-primary-600 font-medium">
                 Categories
               </Link>
+              <Link to="/settings" className="text-gray-700 hover:text-primary-600 font-medium">
+                Settings
+              </Link>
             </nav>
           </div>
         </div>

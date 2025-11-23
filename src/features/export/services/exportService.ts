@@ -162,6 +162,30 @@ export class ExportService {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }
+
+  /**
+   * Export all data to JSON
+   */
+  async exportToJSON(): Promise<void> {
+    const data = await dataRepository.exportAllData();
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `chk2chk-backup-${format(new Date(), 'yyyy-MM-dd')}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  /**
+   * Import data from JSON
+   */
+  async importFromJSON(data: any): Promise<void> {
+    await dataRepository.importAllData(data);
+  }
 }
 
 export const exportService = new ExportService();
