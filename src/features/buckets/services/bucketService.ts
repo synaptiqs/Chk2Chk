@@ -1,66 +1,65 @@
-/**
- * Envelope Service
- * Business logic for envelope operations
+﻿/**
+ * Bucket Service
+ * Business logic for bucket operations
  */
 
 import { dataRepository } from '@/data/services';
-import type { Envelope } from '../types';
+import type { Bucket } from '../types';
 
-export class EnvelopeService {
-  async createEnvelope(data: Omit<Envelope, 'id' | 'createdAt' | 'updatedAt' | 'balance'>): Promise<Envelope> {
-    const envelope = {
+export class BucketService {
+  async createBucket(data: Omit<Bucket, 'id' | 'createdAt' | 'updatedAt' | 'balance'>): Promise<Bucket> {
+    const bucket = {
       ...data,
       balance: data.allocatedAmount - data.spentAmount,
     };
-    return dataRepository.createEnvelope(envelope);
+    return dataRepository.createBucket(bucket);
   }
 
-  async getAllEnvelopes(): Promise<Envelope[]> {
-    return dataRepository.getAllEnvelopes();
+  async getAllBuckets(): Promise<Bucket[]> {
+    return dataRepository.getAllBuckets();
   }
 
-  async getEnvelopeById(id: string): Promise<Envelope | null> {
-    return dataRepository.getEnvelopeById(id);
+  async getBucketById(id: string): Promise<Bucket | null> {
+    return dataRepository.getBucketById(id);
   }
 
-  async updateEnvelope(id: string, data: Partial<Envelope>): Promise<Envelope> {
-    const existing = await this.getEnvelopeById(id);
-    if (!existing) throw new Error('Envelope not found');
+  async updateBucket(id: string, data: Partial<Bucket>): Promise<Bucket> {
+    const existing = await this.getBucketById(id);
+    if (!existing) throw new Error('Bucket not found');
 
     const updated = {
       ...existing,
       ...data,
       balance: (data.allocatedAmount ?? existing.allocatedAmount) - (data.spentAmount ?? existing.spentAmount),
     };
-    return dataRepository.updateEnvelope(id, updated);
+    return dataRepository.updateBucket(id, updated);
   }
 
-  async deleteEnvelope(id: string): Promise<void> {
-    return dataRepository.deleteEnvelope(id);
+  async deleteBucket(id: string): Promise<void> {
+    return dataRepository.deleteBucket(id);
   }
 
-  async allocateToEnvelope(envelopeId: string, amount: number): Promise<Envelope> {
-    const envelope = await this.getEnvelopeById(envelopeId);
-    if (!envelope) throw new Error('Envelope not found');
+  async allocateToBucket(bucketId: string, amount: number): Promise<Bucket> {
+    const bucket = await this.getBucketById(bucketId);
+    if (!bucket) throw new Error('Bucket not found');
 
-    return this.updateEnvelope(envelopeId, {
-      allocatedAmount: envelope.allocatedAmount + amount,
+    return this.updateBucket(bucketId, {
+      allocatedAmount: bucket.allocatedAmount + amount,
     });
   }
 
-  async spendFromEnvelope(envelopeId: string, amount: number): Promise<Envelope> {
-    const envelope = await this.getEnvelopeById(envelopeId);
-    if (!envelope) throw new Error('Envelope not found');
+  async spendFromBucket(bucketId: string, amount: number): Promise<Bucket> {
+    const bucket = await this.getBucketById(bucketId);
+    if (!bucket) throw new Error('Bucket not found');
 
-    if (envelope.balance < amount) {
-      throw new Error('Insufficient balance in envelope');
+    if (bucket.balance < amount) {
+      throw new Error('Insufficient balance in bucket');
     }
 
-    return this.updateEnvelope(envelopeId, {
-      spentAmount: envelope.spentAmount + amount,
+    return this.updateBucket(bucketId, {
+      spentAmount: bucket.spentAmount + amount,
     });
   }
 }
 
-export const envelopeService = new EnvelopeService();
-
+export const bucketService = new BucketService();
