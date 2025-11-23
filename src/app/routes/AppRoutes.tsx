@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom'
 import { Dashboard } from '../../features/dashboard/Dashboard'
 import { CategoriesPage } from '../../features/categories'
 import { ExpensesPage } from '../../features/expenses'
+import { IncomePage } from '../../features/income'
 import { BillsPage } from '../../features/bills/pages/BillsPage'
 import { DebtPage } from '../../features/debt/pages/DebtPage'
 import { EnvelopesPage } from '../../features/envelopes/pages/EnvelopesPage'
@@ -13,6 +14,7 @@ export function AppRoutes() {
     <Layout>
       <Routes>
         <Route path="/" element={<Dashboard />} />
+        <Route path="/income" element={<IncomePage />} />
         <Route path="/categories" element={<CategoriesPage />} />
         <Route path="/expenses" element={<ExpensesPage />} />
         <Route path="/envelopes" element={<EnvelopesPage />} />

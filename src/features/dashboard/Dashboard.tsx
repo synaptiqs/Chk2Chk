@@ -29,7 +29,7 @@ export function Dashboard() {
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Link to="/" className="block">
+          <Link to="/income" className="block">
             <Card>
               <div className="w-full text-left hover:opacity-80 active:opacity-70 transition-opacity touch-manipulation">
                 <h3 className="text-sm font-medium text-gray-500">Total Income</h3>
