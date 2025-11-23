@@ -47,24 +47,28 @@ export function ExpenseList({ expenses, onEdit, onDelete, showCategory = true }:
           >
             <div className="flex justify-between items-start">
               <div className="flex-1">
-                {showCategory && category && (
-                  <div className="flex items-center gap-2 mb-2">
-                    {category.icon && <span className="text-lg">{category.icon}</span>}
-                    <div
-                      className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: category.color }}
-                    />
-                    <span className="text-sm font-medium text-gray-700">{category.name}</span>
-                  </div>
-                )}
                 <div className="flex items-center gap-3">
-                  <p className="text-sm text-gray-600">
-                    {format(new Date(expense.date), 'MMM dd, yyyy')}
-                  </p>
+                  {category ? (
+                    <h3 className="font-semibold text-gray-900">{category.name}</h3>
+                  ) : (
+                    <h3 className="font-semibold text-gray-900">Expense</h3>
+                  )}
                   <span className="text-lg font-bold text-red-600">
                     {formatCurrency(expense.amount)}
                   </span>
                 </div>
+                <p className="text-sm text-gray-600 mt-1">
+                  {format(new Date(expense.date), 'MMM dd, yyyy')}
+                </p>
+                {showCategory && category && (
+                  <div className="flex items-center gap-2 mt-1">
+                    {category.icon && <span className="text-sm">{category.icon}</span>}
+                    <div
+                      className="w-2 h-2 rounded-full"
+                      style={{ backgroundColor: category.color }}
+                    />
+                  </div>
+                )}
                 {expense.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-2">
                     {expense.tags.map(tag => (
